@@ -53,6 +53,11 @@ $route['default_controller'] = 'Welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['list'] = 'Default_student/get_list';
-$route['get/(:any)'] = 'Default_student/get_name/$1';
-$route['create/(:any)/(:any)/(:num)/(:num)'] = 'Default_student/insert_student/$1/$2/$3/$4';
+// default information for student
+$route['default/list'] = 'Default_student/get_list';
+$route['default/get/(:any)'] = 'Default_student/get_name/$1';
+$route['default/create/(:any)/(:any)/(:num)/(:num)'] = 'Default_student/insert_student/$1/$2/$3/$4';
+
+// total information for student
+$route['student/list'] = 'Student/get_list';
+$route['student/get/(:any)'] = 'Student/get_id/$1';
