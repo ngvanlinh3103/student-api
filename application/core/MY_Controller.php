@@ -33,6 +33,8 @@ class MY_Controller extends CI_Controller{
     public function __construct(){
 
         parent::__construct();
+        $this->load->database();
+        
         $this->posting_data = $this->get_posting_data();
         $this->page_title = META_DEFAULT_PAGE_TITLE;
 
