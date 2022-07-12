@@ -1,11 +1,15 @@
 <?php
-    class Default_model extends CI_Model{
+    class Default_model extends MY_Model{
 
         function get_list(){
 
-            $query = $this->db->query("call default_student_list");
+            $this->init_m_sql();
+            $sql = "call default_student_list";
+            $res = $this->m_query($sql);
 
-            return $query->result_array();
+            log_message("info", "Student List: {$sql}");
+
+            return $this->process_m_result($res)->get_result();
         }
 
         function get_id($id = NULL){

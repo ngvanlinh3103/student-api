@@ -23,6 +23,33 @@ use JetBrains\PhpStorm\Internal\ReturnTypeContract;
             return $this;
         }
 
+        // suporting multi query
+        public function m_query($SqlCommand){
+
+            while(mysqli_next_result($this->mysqli)){;}
+            /* execute multi query */
+            if (mysqli_multi_query($this->mysqli, $SqlCommand)):
+
+                $i = 0;
+                do{
+
+                    if ($result = $this->mysqli->store_result()){
+
+                        while ($row = $result->fetch_assoc()){
+                            $this->Data[$i][] = $row;
+                        }
+                        mysqli_free_result($result);
+                    }
+
+                    $i++;
+
+                } while (@$this->mysqli->next_result());
+
+            endif;
+
+            return $this->Data;
+        }
+
         public function init_m_sql(){
             $this->Data = array();
             $this->ResultSet = array();

@@ -89,3 +89,5 @@ defined("SHOW_LOG_DETAILS")    OR define("SHOW_LOG_DETAILS",  FALSE);
 defined('API_VERSION')         OR define('API_VERSION'         , 1);
 defined("APP_VERSION")         OR define("APP_VERSION"         , 1);
 defined("ASSETS_VERSION")      OR define("ASSETS_VERSION"      , 1);
+
+defined("DF_NUM_ROWS")         OR define("DF_NUM_ROWS"         , 25);
