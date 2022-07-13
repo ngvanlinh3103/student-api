@@ -60,7 +60,6 @@ $route['default/get_id/(:num)'] = 'Default_student/get_id/$1';
 $route['default/list'] = 'Default_student/get_list';
 $route['default/get'] = 'Default_student/get_name';
 $route['default/create'] = 'Default_student/insert_student';
-
 $route['default/update'] = 'Default_student/edit_student';
 $route['default/delete/(:num)'] = 'Default_student/delete_student/$1';
 

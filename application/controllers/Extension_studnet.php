@@ -1,19 +1,8 @@
- <?php
+<?php
 
-use LDAP\Result;
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-    defined('BASEPATH') OR exit('No direct script access allowed');
-
-    class Default_student extends My_Controller {
-
-        function __construct(){
-            parent::__construct();
-            
-            $this->load->model('Default_model');
-        }
-
-  
-
+    class Extension_student extends My_Controller {
         public function get_id($id = NULL){
    
             if(!$id) return $this->failed("Missing default id")->render_json();
@@ -65,15 +54,14 @@ use LDAP\Result;
             return $this->render_json();
         }
 
-        public function get_name($first_name = NULL){
+        public function get_name($id_student = NULL){
 
             $posting_data = $this->posting_data;
-            isset($posting_data['first_name']) && $first_name = $posting_data['first_name'];
+            isset( $posting_data['id_student'] ) && $id_student = $posting_data['id_student'];
 
-            $first_name === "" ? $first_name        = NULL      : $first_name;
+            $id_student === "" ? $id_student = "NULL" : $id_student;
             
-            $result = $this->Default_model->get_name($first_name);
-            var_dump($result->data);die();
+            $result = $this->Default_model->get_name($id_student);
 
             if(isset($result->status) && $result->status){
                 if(isset($result->total) && $result->total > 0){
@@ -93,17 +81,19 @@ use LDAP\Result;
             
             $posting_data = $this->posting_data;
 
-            isset( $posting_data['first_name'] ) && $first_name = $posting_data['first_name'];
-            isset( $posting_data['last_name'] ) && $last_name = $posting_data['last_name'];
-            isset( $posting_data['age'] ) && $age = $posting_data['age'];
-            isset( $posting_data['sex'] ) && $sex = $posting_data['sex'];
+            isset( $posting_data['id_student'] ) && $id_student = $posting_data['id_student'];
+            isset( $posting_data['home'] ) && $home = $posting_data['home'];
+            isset( $posting_data['phone'] ) && $phone = $posting_data['phone'];
+            isset( $posting_data['email'] ) && $email = $posting_data['email'];
+            isset( $posting_data['school'] ) && $school = $posting_data['school'];
 
-            $first_name === "" ? $first_name = "NULL" : $first_name;
-            $last_name === ""? $last_name = "NULL" : $last_name;
-            $age === null ? $age = null : $age;
-            $sex === null ? $sex = null : $sex;
+            $id_student === "" ? $id_student = "NULL" : $id_student;
+            $home === ""? $home = "NULL" : $home;
+            $phone === null ? $phone = null : $phone;
+            $email === null ? $email = null : $email;
+            $school === null ? $school = null : $school;
 
-            $result = $this->Default_model->insert_student($first_name, $last_name, $age, $sex);
+            $result = $this->Default_model->insert_student($id_student, $home, $phone, $school);
 
             if(isset($result->status) || $result->status){
                 $this->success()
@@ -121,18 +111,20 @@ use LDAP\Result;
             $posting_data = $this->posting_data;
 
             isset($posting_data['id']) && $id = $posting_data['id'];
-            isset( $posting_data['first_name'] ) && $first_name = $posting_data['first_name'];
-            isset( $posting_data['last_name'] ) && $last_name = $posting_data['last_name'];
-            isset( $posting_data['age'] ) && $age = $posting_data['age'];
-            isset( $posting_data['sex'] ) && $sex = $posting_data['sex'];
+            isset( $posting_data['id_student'] ) && $id_student = $posting_data['id_student'];
+            isset( $posting_data['home'] ) && $home = $posting_data['home'];
+            isset( $posting_data['phone'] ) && $phone = $posting_data['phone'];
+            isset( $posting_data['email'] ) && $email = $posting_data['email'];
+            isset( $posting_data['school'] ) && $school = $posting_data['school'];
 
-            $id         === ""      ? $id           = "NULL" : $id ;
-            $first_name === ""      ? $first_name   = "NULL" : $first_name;
-            $last_name  === ""      ? $last_name    = "NULL" : $last_name;
-            $age        === null    ? $age          = "NULL" : $age;
-            $sex        === null    ? $sex          = "NULL" : $sex;
+            $id === "" ? $id        = "NULL" : $id;
+            $id_student === "" ? $id_student = "NULL" : $id_student;
+            $home === ""? $home = "NULL" : $home;
+            $phone === null ? $phone = null : $phone;
+            $email === null ? $email = null : $email;
+            $school === null ? $school = null : $school;
 
-            $result = $this->Default_model->edit_student($first_name, $last_name, $age, $sex, $id);
+            $result = $this->Default_model->edit_student($id_student, $home, $phone, $email, $school, $id);
 
             if(isset($result->status) || $result->status){
                 $this->success()
@@ -161,6 +153,4 @@ use LDAP\Result;
 
             return $this->render_json();
         }
-        
     }
-?>

@@ -65,7 +65,9 @@
         function delete_student(
             $id = NULL
         ){
-            return $this->db->query("call default_student_delete(?)",array($id));
+            $res = $this->db->query("call extension_student_delete(?)",array($id));
+
+            return $this->process_results($res)->get_results();
 
         } 
 
