@@ -1,29 +1,41 @@
 <?php
     class Default_model extends MY_Model{
 
-        function get_list(){
+        function get_id(int $id = NULL){
+
+            $res = $this->db->query("call default_student_getid(?)",array($id));
+
+            return $this->process_results($res)->get_results();
+        }
+
+        //list information default student
+        function get_list(int $input_page_number = null, int $input_num_rows = null){
 
             $this->init_m_sql();
-            $sql = "call default_student_list";
+            $sql = "call default_student_list(".
+                (NULL === $input_page_number ? "NULL" : "'". $input_page_number."'").", ".
+                (NULL === $input_num_rows   ? "NULL" :"'". $input_num_rows."'").
+            ")";
+            
+            //using multi when return 2 sql: result want fill and result Total result count 
             $res = $this->m_query($sql);
+            log_message("info", "Default student List: {$sql}");
 
-            log_message("info", "Student List: {$sql}");
-
-            return $this->process_m_result($res)->get_result();
+            return $this->process_m_results($res)->get_results();
         }
 
-        function get_id($id = NULL){
+        //find information default student with name
+        function get_name(string $first_name = NULL){
 
-            $query = $this->db->query("call default_student_getid(?)",array($id));
+            $this->init_m_sql();
+            $sql = "call default_student_get_name(".
+                (null === $first_name ? "NULL" : "'". $first_name."'").
+            ")";
             
-            return $query->result();
-        }
+            $res = $this->m_query($sql);
+            log_message("info", "Default student Name: {$sql}");
 
-        function get_name($name = NULL){
-
-            $query = $this->db->query("call default_student_getname(?)",array($name));
-            
-            return $query->result();
+            return $this->process_m_results($res)->get_results();
         }
 
         function insert_student(
@@ -32,8 +44,9 @@
             $age = NULL,
             $sex =NULL
         ){
-            return $this->db->query("call default_student_insert(?,?,?,?)",array($first_name, $last_name, $age, $sex));
+            $res = $this->db->query("call default_student_insert(?,?,?,?)",array($first_name, $last_name, $age, $sex));
 
+            return $this->process_results($res)->get_results();
         }
 
         function edit_student(    
@@ -44,10 +57,9 @@
             $id = NULL, 
         ){
 
-            $this->db->query("call default_student_update(?,?,?,?,?)",array($first_name, $last_name, $age, $sex, $id));
+            $res = $this->db->query("call default_student_update(?,?,?,?,?)",array($first_name, $last_name, $age, $sex, $id));
 
-            var_dump($this->db->last_query());die;
-
+            return $this->process_results($res)->get_results();
         } 
 
         function delete_student(
@@ -56,5 +68,27 @@
             return $this->db->query("call default_student_delete(?)",array($id));
 
         } 
+
+        public function translate($data = NULL)
+        {
+            foreach ($data as $key => $s) :
+                $data[$key] = $this->translate_single($s);
+            endforeach;
+    
+    
+            return $data;
+        }
+
+        public function translate_single($s = NULL)
+        {
+            if(gettype($s) === "object"){
+                $s = (array)$s;
+            }
+        
+            isset($s['sex']) && $s['sex_text'] = $this->config->item("sex")[$s['sex']] ?? "";
+    
+            return $s;
+    
+        }
         
     }
