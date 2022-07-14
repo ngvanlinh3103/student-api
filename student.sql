@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2022 at 09:25 AM
+-- Generation Time: Jul 14, 2022 at 07:33 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -25,8 +25,17 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `default_get_name` (IN `name` VARCHAR(12))   BEGIN
+	
+	SELECT *  FROM default_student WHERE first_name = name;
+	SELECT COUNT(*) AS total FROM default_student WHERE first_name = name;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_delete` (IN `delete_id` INT)   BEGIN
+
 	 DELETE FROM `default_student` WHERE id_student = delete_id;
+	 SELECT * from default_student;
 
 END$$
 
@@ -35,50 +44,72 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_getid` (IN `fill_id
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_getname` (IN `name` VARCHAR(12))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_get_name` (IN `name` VARCHAR(12))   BEGIN
 	
-	SELECT *  FROM default_student WHERE fisrt_name = name;
+	SELECT *  FROM default_student WHERE first_name = name;
+	SELECT COUNT(*) AS total FROM default_student WHERE first_name = name;
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_insert` (IN `fistname` VARCHAR(12), `last_name` VARCHAR(50), `Age` INT(10), `sex` INT(1))   BEGIN
-	INSERT INTO `default_student`(`first_name`, `last_name`, `Age`, `sex`) VALUES (fistname,last_name,Age,sex);
-
+CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_insert` (IN `first_name` VARCHAR(12), `last_name` VARCHAR(50), `Age` INT(10), `sex` INT(1))   BEGIN
+	INSERT INTO `default_student`(`first_name`, `last_name`, `Age`, `sex`) VALUES (first_name,last_name,Age,sex);
+	SELECT * FROM default_student WHERE id_student = LAST_INSERT_ID();
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_list` ()   BEGIN
-	SELECT *  FROM default_student;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_list` (IN `in_page_number` INT, IN `in_num_rows` INT)   BEGIN
+	DECLARE page_number INT;
+  DECLARE num_rows INT;
+  SET num_rows = ifnull(in_num_rows, 999999999);
+  SET page_number = (ifnull(in_page_number, 1) - 1) * num_rows;
+	
+	SELECT *  FROM default_student LIMIT page_number, num_rows;
+	SELECT COUNT(*) AS total FROM default_student;
+	
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `default_student_update` (IN `fistname` VARCHAR(12), `last_name` VARCHAR(50), `Age` INT(10), `sex` INT(1), `id` INT)   BEGIN
+	
 	UPDATE `default_student` SET `first_name`= fistname,`last_name`= last_name,`Age`= Age,`sex`= sex WHERE id_student = id;
-
+	SELECT * FROM default_student WHERE id_student = id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_delete` (IN `id` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_delete` (IN `id_de` INT)   BEGIN
 	#Routine body goes here...
-DELETE FROM `extension_student` WHERE id = id ;
+DELETE FROM `extension_student` WHERE id = id_de ;
+SELECT * FROM extension_student;
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_getid` (IN `id` INT)   BEGIN
 
 	SELECT *  FROM extension_student WHERE id_student = id;
+	SELECT COUNT(*) as total FROM extension_student WHERE id_student = id;
 	
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_insert` (IN `id_student` INT(11), `home` VARCHAR(50), `phone` INT(12), `email` VARCHAR(50), `school` VARCHAR(100))   BEGIN
 	INSERT INTO `extension_student`( `id_student`, `hometowns`, `phone`, `email`, `school`) VALUES (id_student, home, phone, email, school);
+	SELECT * FROM extension_student WHERE id = LAST_INSERT_ID();
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_list` ()   BEGIN
-	#Routine body goes here...
-	SELECT *  FROM extension_student;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_list` (IN `in_page_number` INT, IN `in_num_rows` INT)   BEGIN
+	
+	DECLARE page_number INT;
+  DECLARE num_rows INT;
+  SET num_rows = ifnull(in_num_rows, 999999999);
+  SET page_number = (ifnull(in_page_number, 1) - 1) * num_rows;
+	
+	SELECT *  FROM extension_student LIMIT page_number, num_rows;
+	SELECT COUNT(*) AS total FROM extension_student;
+	
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_update` (IN `id_student` INT(11), `home` VARCHAR(50), `phone` INT(12), `email` VARCHAR(50), `school` VARCHAR(100), `id` INT(5))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `extension_student_update` (IN `id_student` INT(11), `home` VARCHAR(50), `phone` INT(12), `email` VARCHAR(50), `school` VARCHAR(100), `id_up` INT(5))   BEGIN
 	#Routine body goes here...
-	UPDATE `extension_student` SET `id_student`= id_student,`hometowns`= home ,`phone`=phone,`email`=email,`school`=school  WHERE id = id ;
+	UPDATE `extension_student` SET `id_student`= id_student,`hometowns`= home ,`phone`=phone,`email`=email,`school`=school  WHERE id = id_up ;
+	SELECT * FROM extension_student WHERE id = id_up;
+	
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `student_get_id` (IN `fill_id_student` INT)   BEGIN
@@ -87,6 +118,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `student_get_id` (IN `fill_id_studen
    `extension_student`.`hometowns`,`extension_student`.`phone`, `extension_student`.`email`,`extension_student`.`school` 
    FROM `default_student` INNER JOIN `extension_student` ON `default_student`.id_student = extension_student.id_student 
    WHERE `extension_student`.`id_student`= fill_id_student;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `student_get_name` (IN `name` VARCHAR(12))   BEGIN
+	
+	SELECT SQL_CALC_FOUND_ROWS `default_student`.`first_name`,`default_student`.`last_name`,`default_student`.`sex`,`default_student`.`Age`,`extension_student`.`hometowns`,`extension_student`.`phone`, `extension_student`.`email`,`extension_student`.`school` FROM `default_student` INNER JOIN `extension_student` ON `default_student`.id_student = extension_student.id_student WHERE first_name = name;
+		
+		SELECT FOUND_ROWS() total;
 
 END$$
 
@@ -121,13 +160,20 @@ CREATE TABLE `default_student` (
 INSERT INTO `default_student` (`id_student`, `first_name`, `last_name`, `Age`, `sex`) VALUES
 (1, 'Linh', 'Nguyễn Văn', 25, 1),
 (2, 'Đô', 'Nguyễn Văn', 28, 1),
-(3, 'B', 'Nguyễn Quang', 23, 1),
 (5, 'Anh', 'Nguyễn Đình', 21, 1),
 (6, 'Lương', 'Dương Thị Ngọc', 21, 2),
 (7, 'Minh', 'Nguyễn Thị Thu', 21, 2),
 (8, 'Út', 'Nguyễn Thị', 21, 2),
 (9, 'Nga', 'Nguyễn Thị', 19, 2),
-(10, 'Na', 'Nguyễn Thị', 17, 2);
+(10, 'Na', 'Nguyễn Thị', 17, 2),
+(14, 'nam', 'nguyenthanh', 12, 1),
+(16, 'Tứ', 'Nguyễn Quang', 32, 1),
+(17, 'Vũ', 'Phan Anh', 28, 1),
+(18, 'Cả', 'Phan Thế', 24, 1),
+(20, 'Linh', 'Lê La', 12, 1),
+(40, 'Dâu', 'Dương Thị', 9, 2),
+(46, 'Mít', 'Dương Thị', 1, 2),
+(47, 'Đạo', 'Bá Văn', 22, 1);
 
 -- --------------------------------------------------------
 
@@ -151,7 +197,6 @@ CREATE TABLE `extension_student` (
 INSERT INTO `extension_student` (`id`, `id_student`, `hometowns`, `phone`, `email`, `school`) VALUES
 (1, 1, 'Hà Nội', 369348633, 'ngvanlinh3103@gmail.com', 'HAUI'),
 (2, 2, 'Hà Nội', 365151515, 'ngvando@gmail.com', 'Bach Khoa'),
-(3, 3, 'Hà Đông', 36324234, 'ngvanA@gmail.com', 'NEU'),
 (4, 5, 'Hà Nội', 2147483647, 'dinhanh@gmail.com', 'HAUI'),
 (5, 6, 'Thái Nguyên', 365567545, 'ngocluong@gmail.com', 'sư phạm'),
 (6, 8, 'Hà Nội', 93124423, 'thiut@gmail.com', 'NEU');
@@ -180,13 +225,13 @@ ALTER TABLE `extension_student`
 -- AUTO_INCREMENT for table `default_student`
 --
 ALTER TABLE `default_student`
-  MODIFY `id_student` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_student` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `extension_student`
 --
 ALTER TABLE `extension_student`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
