@@ -55,7 +55,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 // $route['default/list'] = 'Default_student/get_list';
 
-// default information for student  routes
+// default information for student
 $route['default/get_id/(:num)'] = 'Default_student/get_id/$1';
 $route['default/list'] = 'Default_student/get_list';
 $route['default/get'] = 'Default_student/get_name';
@@ -63,7 +63,7 @@ $route['default/create'] = 'Default_student/insert_student';
 $route['default/update'] = 'Default_student/edit_student';
 $route['default/delete/(:num)'] = 'Default_student/delete_student/$1';
 
-//extension information for student routes
+//extension information for student
 $route['extension/get_id'] = 'Extension_student/get_id';
 $route['extension/list'] = 'Extension_student/get_list';
 $route['extension/create'] = 'Extension_student/insert_student';
@@ -72,5 +72,4 @@ $route['extension/delete/(:num)'] = 'Extension_student/delete_student/$1';
 
 // total information for student
 $route['list'] = 'Student/get_list';
-$route['get/(:num)'] = 'Student/get_id/$1';
-$route['name'] = 'Student/get_name';
+$route['get'] = 'Student/get_name';
