@@ -531,7 +531,7 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-$config['sex'] = array(
+$config['gender'] = array(
     "1"     => "nam",
     "2"     => "nữ"
 );

@@ -1,18 +1,21 @@
 <?php
-    class Student_model extends CI_Model{
+    class Student_model extends MY_Model{
 
         function get_list(){
 
-            $query = $this->db->query("call student_list");
-
-            return $query->result_array();
+            $res = $this->db->query("call student_list()");
+// var_dump($this->process_results($res)->get_results());die();
+            return $this->process_results($res)->get_results();
         }
 
-        function get_id($id = NULL){
+        function get_name($name = NULL){
 
-            $query = $this->db->query("call student_get_id(?)",array($id));
+            $this->init_m_sql();
+            $sql = "call student_get_name(".(NULL === $name ? 'NULL' : "'". $name."'").")";
 
-            return $query->result();
+            $res = $this->m_query($sql);
+
+            return $this->process_m_results($res)->get_results();
         }
 
     }

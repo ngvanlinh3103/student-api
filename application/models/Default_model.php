@@ -65,7 +65,7 @@
         function delete_student(
             $id = NULL
         ){
-            $res = $this->db->query("call extension_student_delete(?)",array($id));
+            $res = $this->db->query("call default_student_delete(?)",array($id));
 
             return $this->process_results($res)->get_results();
 
@@ -87,7 +87,7 @@
                 $s = (array)$s;
             }
         
-            isset($s['sex']) && $s['sex_text'] = $this->config->item("sex")[$s['sex']] ?? "";
+            isset($s['sex']) && $s['sex_text'] = $this->config->item("gender")[$s['sex']] ?? "";
     
             return $s;
     

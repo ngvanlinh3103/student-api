@@ -21,9 +21,10 @@ use LDAP\Result;
             $result = $this->Default_model->get_id($id);
 
             if(isset($result->status) || $result->status){
-                
+                $the_results = $result->data;
+
                 $this->success()
-                            ->set("data", isset($result->data) ? $result->data : [])
+                            ->set("data", isset($result->data) ?$this->Default_model->translate($result->data)  : [])
                 ;
             }
             else{
@@ -51,7 +52,7 @@ use LDAP\Result;
             if(isset($result->status) || $result->status) {
                 if(isset($result->total) && (int)$result->total > 0) {
                     $this->success()
-                                ->set("data", isset($result->data) ? $result->data : [])
+                                ->set("data", isset($result->data) ? $this->Default_model->translate($result->data) : [])
                                 ->set("page", $input_page_number)
                                 ->set("limit", $input_num_rows)
                                 ->set("total", (int)$result->total);
@@ -78,7 +79,7 @@ use LDAP\Result;
             if(isset($result->status) && $result->status){
                 if(isset($result->total) && $result->total > 0){
                     $this->success()
-                            ->set("data", isset($result->data)? $result->data : [])
+                            ->set("data", isset($result->data)? $this->Default_model->translate($result->data) : [])
                             ->set("total", $result->total);
                 }
             }
@@ -107,7 +108,7 @@ use LDAP\Result;
 
             if(isset($result->status) || $result->status){
                 $this->success()
-                            ->set("data", isset($result->data) ? $result->data : [])            
+                            ->set("data", isset($result->data) ? $this->Default_model->translate($result->data) : [])            
                 ;
             }
             else{
@@ -136,7 +137,7 @@ use LDAP\Result;
 
             if(isset($result->status) || $result->status){
                 $this->success()
-                            ->set("data", isset($result->data) ? $result->data : [])            
+                            ->set("data", isset($result->data) ? $this->Default_model->translate($result->data) : [])            
                 ;
             }
             else{
@@ -153,7 +154,7 @@ use LDAP\Result;
 
             if(isset($result->status) && $result->status){
                 $this->success()
-                                ->set("data", isset($result->data) ? $result->data : []);
+                            ->set("data", isset($result->data) ? $this->Default_model->translate($result->data) : []);
             }
             else{
                 $this->failed($result->error);
